@@ -6,9 +6,9 @@ from ..types import Annotation, Document
 
 
 def annot_to_dict(
-    doc: Document,
-    annot: Annotation,
-    remove_hyphens: bool
+        doc: Document,
+        annot: Annotation,
+        remove_hyphens: bool
 ) -> typ.Dict[str, typ.Any]:
     """Convert an annotation to a dictionary representation suitable for JSON encoding."""
     assert annot.pos
@@ -26,6 +26,13 @@ def annot_to_dict(
         "color": ('#' + annot.color.ashex()) if annot.color else None
     }
 
+    pre, post = annot.getcontext(remove_hyphens=True)
+
+    if pre:
+        result['pre_context'] = pre
+    if post:
+        result['post_context'] = post
+
     # Remove keys with None values in nested dictionary and return
     return {k: v for k, v in result.items() if v is not None}
 
@@ -35,7 +42,7 @@ class JsonPrinter(Printer):
             self,
             *,
             remove_hyphens: bool,  # Whether to remove hyphens across a line break
-            output_codec: str      # Text codec in use for output
+            output_codec: str  # Text codec in use for output
     ) -> None:
         self.remove_hyphens = remove_hyphens
         self.seen_first = False
@@ -48,9 +55,9 @@ class JsonPrinter(Printer):
         return '\n'
 
     def print_file(
-        self,
-        filename: str,
-        document: Document
+            self,
+            filename: str,
+            document: Document
     ) -> typ.Iterator[str]:
         if self.seen_first:
             # The flat array format is incompatible with multiple input files
