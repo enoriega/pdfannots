@@ -160,7 +160,7 @@ class _PDFProcessor(PDFLayoutAnalyzer):
     and to capture the text that annotations may refer to.
     """
 
-    CONTEXT_CHARS = 256
+    CONTEXT_CHARS = 2048
     """Maximum number of recent characters to keep as context."""
 
     page: typ.Optional[Page]                # Page being processed.

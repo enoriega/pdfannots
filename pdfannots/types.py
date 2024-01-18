@@ -361,9 +361,26 @@ class Annotation(ObjectWithPos):
         else:
             return None
 
+    def getcontext(self, remove_hyphens: bool = False) -> typ.Optional[str]:
+        """Retrieve cleaned-up context, after rendering."""
+        if self.pre_context:
+            captured = ''.join(self.pre_context)
+            pre_context = merge_lines(captured, remove_hyphens, strip_space=False)
+        else:
+            pre_context = None
+
+        if self.post_context:
+            captured = ''.join(self.post_context)
+            post_context = merge_lines(captured, remove_hyphens, strip_space=False)
+        else:
+            post_context = None
+
+        return pre_context, post_context
+
+
     def wants_context(self) -> bool:
         """Returns true if this annotation type should include context."""
-        return self.subtype == AnnotationType.StrikeOut
+        return self.subtype == AnnotationType.StrikeOut or self.subtype == AnnotationType.Highlight
 
     def set_pre_context(self, pre_context: str) -> None:
         assert self.pre_context is None
