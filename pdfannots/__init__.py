@@ -260,7 +260,8 @@ class _PDFProcessor(PDFLayoutAnalyzer):
                     # We already gave the annotation the pre-context, so it is subscribed.
                     # Locate and remove the annotation's existing context subscription.
                     assert last_charseq != 0
-                    i = bisect.bisect_left(self.context_subscribers, (last_charseq,))
+                    # i = bisect.bisect_left(self.context_subscribers, (last_charseq,))
+                    i = self.context_subscribers.index((last_charseq, a))
                     assert 0 <= i < len(self.context_subscribers)
                     (found_charseq, found_annot) = self.context_subscribers.pop(i)
                     assert found_charseq == last_charseq
